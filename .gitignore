@@ -1,0 +1,9 @@
+node_modules
+dist
+*.tsbuildinfo
+*.tgz
+test/*.js
+.local/
+
+.DS_Store
+.idea
