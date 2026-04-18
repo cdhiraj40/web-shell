@@ -50,7 +50,7 @@ class FakePromptSession implements PromptSession {
 }
 
 test("ensureInitSigning creates a keystore when one is not present", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-signing-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-signing-"));
 
   try {
     let created: {
@@ -101,7 +101,7 @@ test("ensureInitSigning creates a keystore when one is not present", async () =>
 });
 
 test("ensureInitSigning reuses an existing keystore without creating a new one", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-signing-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-signing-"));
   const keystorePath = path.join(tempDirectory, "android.keystore");
 
   try {

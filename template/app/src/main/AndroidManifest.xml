@@ -14,12 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:hardwareAccelerated="true"
-        android:theme="@style/Theme.MwaWebShell">
+        android:theme="@style/Theme.WebShell">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/Theme.MwaWebShell.Splash">
+            android:theme="@style/Theme.WebShell.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

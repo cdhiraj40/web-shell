@@ -9,7 +9,6 @@ import { createStepFeedback, runStep } from "../lib/ui.js";
 
 export interface BuildCommandOptions {
   projectDir?: string;
-  release?: boolean;
   stacktrace?: boolean;
   sdkDir?: string;
   keystorePath?: string;
@@ -56,7 +55,7 @@ export async function runBuildCommand(
 
   const projectConfig = await readProjectConfig(projectDirectory);
   const signing = resolveSigning(options, projectConfig?.signing);
-  const task = options.release ? "assembleRelease" : "assembleDebug";
+  const task = "assembleRelease";
 
   const gradleArgs = [task];
   if (options.stacktrace) {
@@ -67,7 +66,7 @@ export async function runBuildCommand(
   const prompter = new Prompter();
 
   try {
-    if (options.release && signing.keystorePath && signing.keyAlias) {
+    if (signing.keystorePath && signing.keyAlias) {
       const credentials = await (
         runtime.resolveSigningPasswords ??
         ((candidate) => promptBuildSigningPasswords(prompter, candidate))
@@ -95,8 +94,8 @@ export async function runBuildCommand(
         describeGradleTaskSuccess(task),
       );
     } else {
-      if (options.release && (!signing.keystorePath || !signing.keyAlias)) {
-        feedback.info("No signing metadata configured. Gradle will produce an unsigned release artifact.");
+      if (!signing.keystorePath || !signing.keyAlias) {
+        feedback.info("No signing metadata configured. Gradle will produce an unsigned release APK.");
       }
 
       await runStep(
@@ -124,7 +123,7 @@ function describeGradleTask(task: string): string {
     case "assembleRelease":
       return "Building release APK...";
     default:
-      return "Building debug APK...";
+      return "Building APK...";
   }
 }
 
@@ -133,7 +132,7 @@ function describeGradleTaskSuccess(task: string): string {
     case "assembleRelease":
       return "Built release APK.";
     default:
-      return "Built debug APK.";
+      return "Built APK.";
   }
 }
 
@@ -196,9 +195,7 @@ function printBuildOutput(
   options: BuildCommandOptions,
   _toolchain: DoctorResult,
 ): void {
-  const variant = options.release ? "release" : "debug";
-  const apkName = options.release ? "app-release.apk" : "app-debug.apk";
   console.log(
-    `Build finished. Check ${path.join(projectDirectory, "app", "build", "outputs", "apk", variant, apkName)}`,
+    `Build finished. Check ${path.join(projectDirectory, "app", "build", "outputs", "apk", "release", "app-release.apk")}`,
   );
 }

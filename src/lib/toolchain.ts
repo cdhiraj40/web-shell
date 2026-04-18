@@ -19,7 +19,7 @@ import {
 const REQUIRED_JAVA_MAJOR_VERSION = 17;
 const REQUIRED_ANDROID_PLATFORM = 36;
 const REQUIRED_ANDROID_BUILD_TOOLS_VERSION = "36.0.0";
-const MANAGED_TOOLS_DIRECTORY = path.join(os.homedir(), ".mwa-webshell");
+const MANAGED_TOOLS_DIRECTORY = path.join(os.homedir(), ".webshell");
 const MANAGED_JDK_DIRECTORY = path.join(MANAGED_TOOLS_DIRECTORY, "jdk-17");
 const MANAGED_ANDROID_SDK_DIRECTORY = path.join(MANAGED_TOOLS_DIRECTORY, "android-sdk");
 
@@ -451,7 +451,7 @@ async function defaultInstallManagedJdk(): Promise<ResolvedJavaInstallation> {
     `https://api.adoptium.net/v3/binary/latest/${REQUIRED_JAVA_MAJOR_VERSION}/ga/` +
     `${platform}/${architecture}/jdk/hotspot/normal/eclipse?project=jdk`;
   const archiveExtension = process.platform === "win32" ? ".zip" : ".tar.gz";
-  const downloadDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-jdk-download-"));
+  const downloadDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-jdk-download-"));
   const archivePath = path.join(downloadDirectory, `jdk${archiveExtension}`);
   const extractDirectory = path.join(downloadDirectory, "extract");
 
@@ -495,7 +495,7 @@ async function defaultInstallAndroidCommandLineTools(
     throw new Error(`Automatic Android command-line tools installation is not supported on ${process.platform}.`);
   }
 
-  const downloadDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-android-cli-"));
+  const downloadDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-android-cli-"));
   const archivePath = path.join(downloadDirectory, "command-line-tools.zip");
   const extractDirectory = path.join(downloadDirectory, "extract");
 

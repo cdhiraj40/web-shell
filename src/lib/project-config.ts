@@ -28,7 +28,7 @@ export async function writeProjectConfig(
     startUrl: `${webUrl.pathname}${webUrl.search}`,
     webManifestUrl: asRemoteUrl(config.source.webManifest),
     fallbackType: "webview",
-    generatorApp: "mwa-webshell-cli",
+    generatorApp: "webshell-cli",
     signingKey,
   };
 

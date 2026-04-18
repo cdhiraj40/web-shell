@@ -19,6 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MwaWebShell"
+rootProject.name = "WebShell"
 include(":app")
- 

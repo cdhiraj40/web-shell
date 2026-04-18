@@ -12,7 +12,7 @@ test("parseJavaMajorVersion handles common java -version outputs", () => {
 });
 
 test("doctor fails without fix when JDK is missing", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-doctor-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-doctor-"));
   const gradleWrapper = path.join(
     tempDirectory,
     process.platform === "win32" ? "gradlew.bat" : "gradlew",
@@ -40,7 +40,7 @@ test("doctor fails without fix when JDK is missing", async () => {
 });
 
 test("doctor auto-installs missing tools and writes local.properties", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-doctor-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-doctor-"));
   const gradleWrapper = path.join(
     tempDirectory,
     process.platform === "win32" ? "gradlew.bat" : "gradlew",

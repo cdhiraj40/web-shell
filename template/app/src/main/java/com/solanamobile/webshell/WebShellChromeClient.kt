@@ -9,7 +9,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-class MwaWebChromeClient(
+class WebShellChromeClient(
     private val onProgressChanged: (Int) -> Unit,
     private val isDebug: Boolean,
 ) : WebChromeClient() {
@@ -66,6 +66,6 @@ class MwaWebChromeClient(
     }
 
     private companion object {
-        const val TAG = "MwaWebShell"
+        const val TAG = "WebShell"
     }
 }

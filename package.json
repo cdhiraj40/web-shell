@@ -1,11 +1,11 @@
 {
-  "name": "@solanamobile/webshell-cli",
+  "name": "@solana-mobile/webshell-cli",
   "version": "0.1.0",
   "description": "Solana Mobile Web Shell is a Command Line Interface (CLI) that helps developers generate an Android app project that wraps an existing web app or website inside an Android WebView",
   "author": "Solana Mobile",
   "type": "module",
   "bin": {
-    "mwa-webshell": "./bin/mwa-webshell.js"
+    "webshell": "./bin/webshell.js"
   },
   "repository": {
     "type": "git",

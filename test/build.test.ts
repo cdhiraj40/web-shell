@@ -6,7 +6,7 @@ import test from "node:test";
 import { runBuildCommand } from "../src/commands/build.ts";
 
 test("build runs doctor first and passes resolved env into Gradle", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-build-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-build-"));
   const gradleWrapper = path.join(
     tempDirectory,
     process.platform === "win32" ? "gradlew.bat" : "gradlew",
@@ -39,7 +39,7 @@ test("build runs doctor first and passes resolved env into Gradle", async () => 
         runGradle: async (command, args, cwd, env) => {
           gradleCalled = true;
           assert.equal(command, gradleWrapper);
-          assert.deepEqual(args, ["assembleDebug", "--stacktrace"]);
+          assert.deepEqual(args, ["assembleRelease", "--stacktrace"]);
           assert.equal(cwd, tempDirectory);
           assert.equal(env?.JAVA_HOME, "/tmp/jdk");
           assert.equal(env?.ANDROID_SDK_ROOT, "/tmp/android-sdk");
@@ -55,8 +55,8 @@ test("build runs doctor first and passes resolved env into Gradle", async () => 
   }
 });
 
-test("release build requires signing passwords when signing metadata exists", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-build-"));
+test("build requires signing passwords when signing metadata exists", async () => {
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-build-"));
   const gradleWrapper = path.join(
     tempDirectory,
     process.platform === "win32" ? "gradlew.bat" : "gradlew",
@@ -84,7 +84,7 @@ test("release build requires signing passwords when signing metadata exists", as
       await assert.rejects(
         runBuildCommand(
           tempDirectory,
-          { release: true },
+          {},
           {
             doctor: async () => ({
               gradleWrapper,

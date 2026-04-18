@@ -7,7 +7,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
 
-open class MwaWebViewClient(
+open class WebShellViewClient(
     private val context: Context,
     private val scopeHostProvider: () -> String,
 ) : WebViewClient() {
@@ -25,7 +25,7 @@ open class MwaWebViewClient(
         return when (scheme) {
             "solana-wallet" -> {
                 context.startActivity(Intent(Intent.ACTION_VIEW, url))
-                // The MWA protocol library uses window.blur to detect that the
+                // The wallet protocol library uses window.blur to detect that the
                 // wallet app opened.  In a WebView the blur event never fires
                 // naturally, so we dispatch a synthetic one to unblock the
                 // detection promise (3-second timeout in startSession.ts).

@@ -196,13 +196,13 @@ export async function runInitCommand(
     console.log(`Generated project at ${targetDirectory}`);
     console.log(`Application ID: ${applicationId}`);
     console.log(`Web URL: ${webUrl}`);
-    console.log(
-      usingBundledTemplate
-        ? "Template source: bundled"
-        : `Template source: ${templateRepo}#${templateRef}`,
-    );
     console.log("Next steps:");
-    console.log(`  mwa-webshell build ${quoteShellValue(targetDirectory)}`);
+    if (signing?.keystorePath && signing.keyAlias) {
+      console.log("  # Optional: set these to skip password prompts during builds");
+      console.log("  export WEB_SHELL_KEYSTORE_PASSWORD='<keystore-password>'");
+      console.log("  export WEB_SHELL_KEY_PASSWORD='<key-password>'");
+    }
+    console.log(`  webshell build ${quoteShellValue(targetDirectory)}`);
   } finally {
     prompter.close();
   }
@@ -250,11 +250,12 @@ async function resolveWebUrl(
   bubblewrapSeed?: ManifestSeed,
   webManifestSeed?: ManifestSeed,
 ): Promise<string> {
-  return prompter.text("Web app URL", {
-    defaultValue: explicitValue ?? bubblewrapSeed?.webUrl ?? webManifestSeed?.webUrl,
+  const defaultValue = explicitValue ?? bubblewrapSeed?.webUrl ?? webManifestSeed?.webUrl;
+  return prompter.text(defaultValue ? "Website URL" : "Website URL (https://example.com)", {
+    defaultValue,
     validate: (value) => {
       if (!value.trim()) {
-        return "Web app URL is required.";
+        return "Website URL is required.";
       }
       try {
         normalizeHttpUrl(value);

@@ -12,7 +12,7 @@ const tinyPngBuffer = Buffer.from(
 );
 
 test("init infers the Gradle project name from the target directory", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-init-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-init-"));
   const generatedProject = path.join(tempDirectory, "generated");
 
   try {
@@ -66,14 +66,14 @@ test("init infers the Gradle project name from the target directory", async () =
     assert.equal(twaManifest.host, "app.example.com");
     assert.equal(twaManifest.startUrl, "/launch");
     assert.equal(twaManifest.fallbackType, "webview");
-    assert.equal(twaManifest.generatorApp, "mwa-webshell-cli");
+    assert.equal(twaManifest.generatorApp, "webshell-cli");
   } finally {
     await rm(tempDirectory, { recursive: true, force: true });
   }
 });
 
 test("init reuses Bubblewrap metadata for a migration-style flow", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-init-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-init-"));
 
   try {
     const iconPath = path.join(tempDirectory, "launcher.png");
@@ -156,7 +156,7 @@ test("init reuses Bubblewrap metadata for a migration-style flow", async () => {
 });
 
 test("init imports launcher branding from a standard web manifest", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-init-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-init-"));
 
   try {
     const iconPath = path.join(tempDirectory, "maskable.png");
@@ -210,7 +210,7 @@ test("init imports launcher branding from a standard web manifest", async () => 
 });
 
 test("init derives the application ID from the web app host by default", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-init-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-init-"));
 
   try {
     const webManifestPath = path.join(tempDirectory, "manifest.json");
@@ -254,7 +254,7 @@ test("init derives the application ID from the web app host by default", async (
 });
 
 test("init keeps the Android application ID and sanitizes only the Kotlin package", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-init-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-init-"));
 
   try {
     const webManifestPath = path.join(tempDirectory, "manifest.json");
@@ -307,7 +307,7 @@ test("init keeps the Android application ID and sanitizes only the Kotlin packag
 });
 
 test("init uses the manifest short_name as the default launcher app name", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-init-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-init-"));
 
   try {
     const webManifestPath = path.join(tempDirectory, "manifest.json");
@@ -339,7 +339,7 @@ test("init uses the manifest short_name as the default launcher app name", async
 });
 
 test("init keeps the default launcher artwork when manifest icons are unsupported", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-init-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-init-"));
 
   try {
     const webManifestPath = path.join(tempDirectory, "manifest.json");
@@ -401,7 +401,7 @@ test("init keeps the default launcher artwork when manifest icons are unsupporte
 });
 
 test("init keeps the default launcher artwork when a manifest icon URL returns 404", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-init-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-init-"));
   const server = http.createServer((request, response) => {
     if (request.url === "/manifest.json") {
       response.writeHead(200, { "content-type": "application/json" });

@@ -69,7 +69,6 @@ async function main(): Promise<void> {
         args: argv.slice(1),
         allowPositionals: true,
         options: {
-          release: { type: "boolean" },
           stacktrace: { type: "boolean" },
           "keystore-path": { type: "string" },
           "keystore-alias": { type: "string" },
@@ -83,7 +82,6 @@ async function main(): Promise<void> {
       }
 
       await runBuildCommand(positionals[0], {
-        release: values.release,
         stacktrace: values.stacktrace,
         keystorePath: values["keystore-path"],
         keystoreAlias: values["keystore-alias"],
@@ -136,25 +134,25 @@ function printHelp(): void {
   console.log(`Solana Mobile Web Shell CLI ${CLI_VERSION}
 
 Usage:
-  mwa-webshell <command> [options]
+  webshell <command> [options]
 
 Commands:
   init [directory]   Generate a new Android WebView shell project
   build [directory]  Build a generated Android project
   doctor [directory] Check and optionally install required Android build tools
 
-Run "mwa-webshell <command> --help" for command-specific options.`);
+Run "webshell <command> --help" for command-specific options.`);
 }
 
 function printInitHelp(): void {
   console.log(`Usage:
-  mwa-webshell init [directory] [options]
+  webshell init [directory] [options]
 
 Options:
   --manifest <path-or-url>                     Load a web manifest.json or Bubblewrap twa-manifest.json
   --application-id <id>                        Android application ID
   --app-name <name>                            Android launcher name
-  --url <url>                                  Default web URL to load
+  --url <url>                                  Default website URL to load
   --version-code <number>                      Android version code for updates/releases
   --version-name <name>                        Android version name for updates/releases
   --keystore-path <path>                       Optional release keystore path
@@ -165,10 +163,9 @@ Options:
 
 function printBuildHelp(): void {
   console.log(`Usage:
-  mwa-webshell build [directory] [options]
+  webshell build [directory] [options]
 
 Options:
-  --release                    Build a release APK
   --stacktrace                 Pass --stacktrace to Gradle
   --keystore-path <path>       Release keystore path override
   --keystore-alias <alias>     Release key alias override
@@ -177,7 +174,7 @@ Options:
 
 function printDoctorHelp(): void {
   console.log(`Usage:
-  mwa-webshell doctor [directory] [options]
+  webshell doctor [directory] [options]
 
 Options:
   --fix                        Install missing tools and SDK packages automatically

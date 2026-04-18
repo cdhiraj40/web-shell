@@ -11,7 +11,7 @@ import {
 } from "../src/lib/manifests.ts";
 
 test("loadBubblewrapManifest reads Bubblewrap-style metadata", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-manifest-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-manifest-"));
 
   try {
     const manifestPath = path.join(tempDirectory, "twa-manifest.json");
@@ -121,7 +121,7 @@ test("loadWebManifest falls back to the manifest site origin when start_url is m
 });
 
 test("loadManifest autodetects Bubblewrap-style manifests", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-manifest-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-manifest-"));
 
   try {
     const manifestPath = path.join(tempDirectory, "twa-manifest.json");

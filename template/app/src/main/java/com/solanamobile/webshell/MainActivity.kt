@@ -46,7 +46,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.solanamobile.webshell.ui.theme.MwaWebShellTheme
+import com.solanamobile.webshell.ui.theme.WebShellTheme
 import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
@@ -56,8 +56,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
         setContent {
-            MwaWebShellTheme {
-                MwaWebShellScreen()
+            WebShellTheme {
+                WebShellScreen()
             }
         }
     }
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun MwaWebShellScreen() {
+fun WebShellScreen() {
     val context = LocalContext.current
     val startUrl = remember { normalizeHttpUrl() ?: BuildConfig.WEB_SHELL_URL }
     val scopeHost = remember(startUrl) { startUrl.toUri().host.orEmpty() }
@@ -113,7 +113,7 @@ fun MwaWebShellScreen() {
                 CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
 
                 webChromeClient =
-                    MwaWebChromeClient(
+                    WebShellChromeClient(
                         onProgressChanged = { newProgress ->
                             progress = newProgress / 100f
                             if (newProgress > 0) showSplash = false
@@ -123,7 +123,7 @@ fun MwaWebShellScreen() {
                     )
 
                 webViewClient =
-                    object : MwaWebViewClient(context, scopeHostProvider = { scopeHost }) {
+                    object : WebShellViewClient(context, scopeHostProvider = { scopeHost }) {
                         override fun onPageFinished(
                             view: WebView,
                             url: String?,
@@ -325,7 +325,7 @@ private fun normalizeHttpUrl(): String? {
     return uri.toString()
 }
 
-private const val TAG = "MwaWebShell"
+private const val TAG = "WebShell"
 
 private val VIEWPORT_PROBE_AND_PATCH_SCRIPT =
     """
@@ -349,14 +349,14 @@ private val VIEWPORT_PROBE_AND_PATCH_SCRIPT =
 
       function updateViewportVars() {
         var px = Math.max(window.innerHeight || 0, 1) + 'px';
-        document.documentElement.style.setProperty('--mwa-vh-px', px);
-        document.documentElement.style.setProperty('--mwa-dvh-px', px);
+        document.documentElement.style.setProperty('--webshell-vh-px', px);
+        document.documentElement.style.setProperty('--webshell-dvh-px', px);
       }
 
       function applyFallbackPatch() {
         updateViewportVars();
-        if (!window.__mwa_viewport_resize_hook__) {
-          window.__mwa_viewport_resize_hook__ = true;
+        if (!window.__webshell_viewport_resize_hook__) {
+          window.__webshell_viewport_resize_hook__ = true;
           window.addEventListener('resize', updateViewportVars);
           window.addEventListener('orientationchange', updateViewportVars);
           if (window.visualViewport) {
@@ -364,16 +364,16 @@ private val VIEWPORT_PROBE_AND_PATCH_SCRIPT =
           }
         }
 
-        var style = document.getElementById('__mwa_viewport_patch_style__');
+        var style = document.getElementById('__webshell_viewport_patch_style__');
         if (!style) {
           style = document.createElement('style');
-          style.id = '__mwa_viewport_patch_style__';
+          style.id = '__webshell_viewport_patch_style__';
           style.textContent = [
-            ':root { --mwa-vh-px: 100vh; --mwa-dvh-px: 100vh; }',
-            'html, body, #root, #app { min-height: var(--mwa-dvh-px) !important; height: auto !important; }',
-            '[class~="h-screen"], [class~="h-dvh"], [class*="h-screen"], [class*="h-dvh"] { height: var(--mwa-dvh-px) !important; }',
-            '[class~="min-h-screen"], [class~="min-h-dvh"], [class*="min-h-screen"], [class*="min-h-dvh"] { min-height: var(--mwa-dvh-px) !important; }',
-            '[class~="max-h-screen"], [class~="max-h-dvh"], [class*="max-h-screen"], [class*="max-h-dvh"] { max-height: var(--mwa-dvh-px) !important; }'
+            ':root { --webshell-vh-px: 100vh; --webshell-dvh-px: 100vh; }',
+            'html, body, #root, #app { min-height: var(--webshell-dvh-px) !important; height: auto !important; }',
+            '[class~="h-screen"], [class~="h-dvh"], [class*="h-screen"], [class*="h-dvh"] { height: var(--webshell-dvh-px) !important; }',
+            '[class~="min-h-screen"], [class~="min-h-dvh"], [class*="min-h-screen"], [class*="min-h-dvh"] { min-height: var(--webshell-dvh-px) !important; }',
+            '[class~="max-h-screen"], [class~="max-h-dvh"], [class*="max-h-screen"], [class*="max-h-dvh"] { max-height: var(--webshell-dvh-px) !important; }'
           ].join('\\n');
           document.documentElement.appendChild(style);
         }
@@ -383,7 +383,7 @@ private val VIEWPORT_PROBE_AND_PATCH_SCRIPT =
           var className = classElements[i].className;
           if (typeof className !== 'string') continue;
           if (className.indexOf('max-h-[calc(100dvh-1rem)]') !== -1 || className.indexOf('max-h-[calc(100vh-1rem)]') !== -1) {
-            classElements[i].style.maxHeight = 'calc(var(--mwa-dvh-px) - 1rem)';
+            classElements[i].style.maxHeight = 'calc(var(--webshell-dvh-px) - 1rem)';
           }
         }
       }

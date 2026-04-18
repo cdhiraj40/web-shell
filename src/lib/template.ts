@@ -68,7 +68,7 @@ export async function copyTemplateProject(
     return;
   }
 
-  const cloneDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-template-"));
+  const cloneDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-template-"));
   await ensureDirectory(targetDirectory);
 
   try {
@@ -134,11 +134,10 @@ async function copyTemplateEntries(
   overwrite: boolean,
 ): Promise<void> {
   await ensureDirectory(targetDirectory);
-  const isBundledTemplate =
-    sourceDirectory === fileURLToPath(new URL("../../template/", import.meta.url));
+  const usesBundledTemplateLayout = await exists(path.join(sourceDirectory, "gitignore"));
 
   for (const entry of TEMPLATE_ENTRIES) {
-    const sourceName = isBundledTemplate ? entry.bundledSource ?? entry.source : entry.source;
+    const sourceName = usesBundledTemplateLayout ? entry.bundledSource ?? entry.source : entry.source;
     const sourcePath = path.join(sourceDirectory, sourceName);
     const destinationPath = path.join(targetDirectory, entry.destination);
     await ensureDirectory(path.dirname(destinationPath));

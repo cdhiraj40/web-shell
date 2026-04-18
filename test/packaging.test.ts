@@ -11,6 +11,7 @@ const cliDirectory = path.resolve(
 
 test("npm pack dry-run includes only packaged runtime assets", async () => {
   const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
+  await runCommand(npmCommand, ["run", "build"], cliDirectory);
   const output = await runCommand(npmCommand, ["pack", "--dry-run", "--json"], cliDirectory);
   const parsed = JSON.parse(output) as Array<{
     files: Array<{ path: string }>;
@@ -19,10 +20,10 @@ test("npm pack dry-run includes only packaged runtime assets", async () => {
   assert.equal(parsed.length, 1);
   const filePaths = parsed[0]?.files.map((entry) => entry.path) ?? [];
 
-  assert.ok(filePaths.includes("README.md"));
-  assert.ok(filePaths.includes("bin/mwa-webshell.js"));
-  assert.ok(filePaths.includes("dist/index.js"));
-  assert.ok(filePaths.includes("template/build.gradle.kts"));
+  assert.ok(filePaths.includes("README.md"), formatMissingFileMessage("README.md", filePaths));
+  assert.ok(filePaths.includes("bin/webshell.js"), formatMissingFileMessage("bin/webshell.js", filePaths));
+  assert.ok(filePaths.includes("dist/index.js"), formatMissingFileMessage("dist/index.js", filePaths));
+  assert.ok(filePaths.includes("template/build.gradle.kts"), formatMissingFileMessage("template/build.gradle.kts", filePaths));
 
   assert.equal(filePaths.some((filePath) => filePath.startsWith("src/")), false);
   assert.equal(filePaths.some((filePath) => filePath.startsWith("test/")), false);
@@ -67,4 +68,11 @@ async function runCommand(
       );
     });
   });
+}
+
+function formatMissingFileMessage(
+  expectedPath: string,
+  filePaths: string[],
+): string {
+  return `Expected npm pack output to include ${expectedPath}. Actual files: ${filePaths.join(", ")}`;
 }

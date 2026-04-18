@@ -10,7 +10,7 @@ import {
 import { PROJECT_CONFIG_FILENAME } from "../src/lib/utils.ts";
 
 test("writeProjectConfig persists a Bubblewrap-style twa-manifest subset", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-config-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-config-"));
 
   try {
     await writeProjectConfig(tempDirectory, {
@@ -44,7 +44,7 @@ test("writeProjectConfig persists a Bubblewrap-style twa-manifest subset", async
     assert.equal(contents.startUrl, "/launch?mode=prod");
     assert.equal(contents.webManifestUrl, "https://app.example.com/manifest.json");
     assert.equal(contents.fallbackType, "webview");
-    assert.equal(contents.generatorApp, "mwa-webshell-cli");
+    assert.equal(contents.generatorApp, "webshell-cli");
     assert.deepEqual(contents.signingKey, {
       path: "/tmp/release.keystore",
       alias: "release",
@@ -55,7 +55,7 @@ test("writeProjectConfig persists a Bubblewrap-style twa-manifest subset", async
 });
 
 test("readProjectConfig loads signing metadata from twa-manifest.json", async () => {
-  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "mwa-webshell-config-"));
+  const tempDirectory = await mkdtemp(path.join(os.tmpdir(), "webshell-config-"));
 
   try {
     await writeProjectConfig(tempDirectory, {

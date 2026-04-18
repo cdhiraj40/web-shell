@@ -86,7 +86,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             if (hasReleaseSigning) {
                 signingConfig = signingConfigs.getByName("webShellRelease")
             }
