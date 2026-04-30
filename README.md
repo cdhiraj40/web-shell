@@ -20,6 +20,7 @@ References:
 - keeps in-scope navigation inside the app and opens out-of-scope links in the system browser
 - intercepts `solana-wallet://` and related wallet handoff flows natively
 - supports app name, application ID, icons, splash branding, signing metadata, and Android version configuration
+- verifies downloaded manifest icons are valid PNG, JPEG, or WEBP images and skips broken or non-image responses instead of copying them into the Android project
 - accepts both standard web `manifest.json` files and Bubblewrap-style `twa-manifest.json` files
 
 ## Install

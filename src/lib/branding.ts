@@ -110,10 +110,12 @@ async function downloadManifestIcon(
       return undefined;
     }
 
-    return {
-      buffer: await readFile(fileURLToPath(source)),
-      extension,
-    };
+    const buffer = await readFile(fileURLToPath(source));
+    if (!isSupportedImageBuffer(buffer, extension)) {
+      return undefined;
+    }
+
+    return { buffer, extension };
   }
 
   if (source.startsWith("http://") || source.startsWith("https://")) {
@@ -122,15 +124,22 @@ async function downloadManifestIcon(
       throw new Error(`Failed to fetch manifest icon ${source}: ${response.status} ${response.statusText}`);
     }
 
-    const extension = detectImageExtension(source, response.headers.get("content-type") ?? undefined);
+    const contentType = response.headers.get("content-type") ?? undefined;
+    const extension = detectImageExtension(source, contentType);
     if (!extension) {
       return undefined;
     }
 
-    return {
-      buffer: Buffer.from(await response.arrayBuffer()),
-      extension,
-    };
+    if (contentType && !contentType.toLowerCase().startsWith("image/")) {
+      return undefined;
+    }
+
+    const buffer = Buffer.from(await response.arrayBuffer());
+    if (!isSupportedImageBuffer(buffer, extension)) {
+      return undefined;
+    }
+
+    return { buffer, extension };
   }
 
   return undefined;
@@ -174,6 +183,40 @@ function detectImageExtension(
   }
 
   return undefined;
+}
+
+function isSupportedImageBuffer(buffer: Buffer, extension: string): boolean {
+  switch (extension) {
+    case "png":
+      return (
+        buffer.length >= 8 &&
+        buffer[0] === 0x89 &&
+        buffer[1] === 0x50 &&
+        buffer[2] === 0x4e &&
+        buffer[3] === 0x47 &&
+        buffer[4] === 0x0d &&
+        buffer[5] === 0x0a &&
+        buffer[6] === 0x1a &&
+        buffer[7] === 0x0a
+      );
+    case "jpg":
+    case "jpeg":
+      return (
+        buffer.length >= 4 &&
+        buffer[0] === 0xff &&
+        buffer[1] === 0xd8 &&
+        buffer[buffer.length - 2] === 0xff &&
+        buffer[buffer.length - 1] === 0xd9
+      );
+    case "webp":
+      return (
+        buffer.length >= 12 &&
+        buffer.subarray(0, 4).toString("ascii") === "RIFF" &&
+        buffer.subarray(8, 12).toString("ascii") === "WEBP"
+      );
+    default:
+      return false;
+  }
 }
 
 async function writeColors(
