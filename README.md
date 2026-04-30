@@ -72,15 +72,17 @@ The CLI reuses compatible metadata such as app name, start URL, package ID, sign
   - `WEB_SHELL_KEYSTORE_PASSWORD` / `WEB_SHELL_KEY_PASSWORD`
   - hidden interactive prompts during `build`
 
-## Temporary Compatibility Note
+## Wallet Adapter Compatibility
 
 This CLI does not install or update the JavaScript wallet adapter packages used by the website loaded inside the shell.
 
-For Web Shell support, teams should use a Web Shell-capable Solana Mobile wallet adapter canary or a later compatible release. The current minimum known-good baseline for this repo is:
+For Solana Mobile wallet flows to work inside Web Shell, the website must use a Web Shell–compatible release of `@solana-mobile/wallet-adapter-mobile`. The minimum known-good version is [`2.2.8`](https://www.npmjs.com/package/@solana-mobile/wallet-adapter-mobile/v/2.2.8):
 
-- https://www.npmjs.com/package/@solana-mobile/wallet-adapter-mobile/v/0.0.0-canary-20260331201049
+```bash
+npm install @solana-mobile/wallet-adapter-mobile@^2.2.8
+```
 
-Older releases may ignore Web Shell behavior in WebView. Replace this note once the same support is available in a stable upstream release.
+This is required, not optional. Older releases will not detect the Web Shell environment and wallet association will silently fail.
 
 ## Development
 
